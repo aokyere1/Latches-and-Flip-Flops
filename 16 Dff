@@ -1,0 +1,20 @@
+module top_module (
+    input clk,
+    input resetn,           // synchronous, active-low reset
+    input [1:0] byteena,    // byte enable: [1] for upper byte, [0] for lower byte
+    input [15:0] d,         // data input
+    output [15:0] q     // output register
+);
+
+    always @(posedge clk) begin
+        if (!resetn)
+            q <= 16'b0;  // reset all 16 bits synchronously
+        else begin
+            if (byteena[0])
+                q[7:0] <= d[7:0];   // lower byte update
+            if (byteena[1])
+                q[15:8] <= d[15:8]; // upper byte update
+        end
+    end
+
+endmodule
